@@ -3,6 +3,10 @@ html {
   min-height: 100%;
 }
 
+.convert-container {
+  margin-top: 100px;
+}
+
 footer {
   position: absolute;
   bottom: 0;

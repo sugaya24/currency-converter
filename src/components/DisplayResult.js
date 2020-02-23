@@ -16,7 +16,7 @@ export default class DisplayResult extends Component {
     amount = isNaN(amount) ? parseFloat(0).toFixed(2) : amount;
     return (
       <div className="row">
-        <div className="col-md-2"></div>
+        <h2 className="col-md-2">Amount</h2>
         <h2 className="col-md-5">
           {amount} {this.props.country1}
         </h2>

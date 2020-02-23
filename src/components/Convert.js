@@ -55,7 +55,7 @@ export default class Convert extends Component {
     });
 
     return (
-      <div>
+      <div className="convert-container">
         <h1>Convert</h1>
         <div className="row">
           <div className="col-md-2">
