@@ -3,7 +3,7 @@ import React from 'react';
 const Header = () => {
   return (
     <header>
-      <h1>Currency Conversion</h1>
+      <h1>Currency Converter</h1>
     </header>
   );
 };
