@@ -1,5 +1,6 @@
 module.exports = {
   mode: 'production',
+  entry: ['@babel/polyfill', './src/index.js'],
   module: {
     rules: [
       {

@@ -1,23 +1,44 @@
 import React, { Component } from 'react';
+import emoji from 'country-code-emoji';
 
-import currencyData from '../currencyData';
 import DisplayResult from './DisplayResult';
+import axios from 'axios';
 
 export default class Convert extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      currencies: [],
       amount: 0.0,
       cur1: 0,
       cur2: 0,
-      country1: '-',
-      country2: '-',
-      rate: 0
+      country1: '',
+      country2: ''
     };
     this.handleClickLeft = this.handleClickLeft.bind(this);
     this.handleClickRight = this.handleClickRight.bind(this);
     this.renderAmount = this.renderAmount.bind(this);
+  }
+
+  componentDidMount() {
+    axios
+      .get(`https://api.exchangeratesapi.io/latest?base=USD`)
+      .then((res) => {
+        const arr = [...Object.entries(res.data.rates)];
+
+        arr.map((data) => {
+          axios
+            .get(`https://restcountries.eu/rest/v2/currency/${data[0]}`)
+            .then((res) => {
+              data.push(emoji(res.data[0].alpha2Code));
+              this.setState({ currencies: arr });
+            });
+        });
+
+        return res.data;
+      })
+      .catch((err) => {});
   }
 
   handleClickLeft(event) {
@@ -41,19 +62,6 @@ export default class Convert extends Component {
   }
 
   render() {
-    const currencies = Object.entries(currencyData.quotes).map((data) => {
-      const country = data[0]
-        .split('')
-        .slice(3, 6)
-        .join('');
-      const cur2 = data[1];
-      return (
-        <option key={country} value={[country, cur2]}>
-          {country}
-        </option>
-      );
-    });
-
     return (
       <div className="convert-container">
         <h1>Convert</h1>
@@ -72,8 +80,14 @@ export default class Convert extends Component {
                 value={this.state.item}
                 onChange={this.handleClickLeft}
               >
-                <option value="-">-</option>
-                {currencies}
+                <option value="">-- Choose a currency --</option>
+                {this.state.currencies.map((item) => {
+                  return (
+                    <option value={[item[0], item[1]]}>
+                      {item[0]} - {item[2]}
+                    </option>
+                  );
+                })}
               </select>
             </form>
           </div>
@@ -84,8 +98,14 @@ export default class Convert extends Component {
                 value={this.state.item}
                 onChange={this.handleClickRight}
               >
-                <option value="-">-</option>
-                {currencies}
+                <option value="">-- Choose a currency --</option>
+                {this.state.currencies.map((item) => {
+                  return (
+                    <option value={[item[0], item[1]]}>
+                      {item[0]} - {item[2]}
+                    </option>
+                  );
+                })}
               </select>
             </form>
           </div>
